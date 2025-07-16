@@ -1,10 +1,21 @@
 import { Instagram } from "lucide-react";
+import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 function Signup() {
+  const fetchSignUpData = async () => {
+    const response = await fetch("http://localhost:5001/");
+    const data = await response.json();
+    console.log(data);
+  };
+
+  useEffect(() => {
+    fetchSignUpData();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-tr from-pink-100 via-white to-blue-100 flex flex-col items-center pt-24 gap-y-3">
-      <div className="bg-white shadow-lg rounded-2xl p-8 w-full max-w-sm space-y-6">
+    <div className="flex flex-col items-center min-h-screen pt-24 bg-gradient-to-tr from-pink-100 via-white to-blue-100 gap-y-3">
+      <div className="w-full max-w-sm p-8 space-y-6 bg-white shadow-lg rounded-2xl">
         {/* Logo/Header */}
         <div className="flex items-center justify-center gap-3">
           <Instagram className="w-6 h-6 text-pink-600" />
@@ -22,9 +33,9 @@ function Signup() {
         </div>
 
         {/* Terms */}
-        <p className="text-xs text-gray-500 text-center">
+        <p className="text-xs text-center text-gray-500">
           By signing up, you agree to our{" "}
-          <span className="text-blue-600 font-medium cursor-pointer hover:underline">
+          <span className="font-medium text-blue-600 cursor-pointer hover:underline">
             Terms and Conditions
           </span>
         </p>
@@ -33,7 +44,7 @@ function Signup() {
         <input
           type="submit"
           value="Sign Up"
-          className="w-full bg-pink-500 text-white py-2 rounded-md hover:bg-pink-600 cursor-pointer font-semibold transition duration-200"
+          className="w-full py-2 font-semibold text-white transition duration-200 bg-pink-500 rounded-md cursor-pointer hover:bg-pink-600"
         />
       </div>
       <p className="text-sm">
