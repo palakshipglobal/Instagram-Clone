@@ -2,7 +2,10 @@ const express = require("express");
 const app = express();
 const PORT = 5001;
 const mongoose = require("mongoose");
-const mongoURL = require("./keys");
+
+require("./models/model");
+app.use(express.json());
+app.use(require("./routes/auth")); //to run middleware function
 
 mongoose.connect(
   "mongodb+srv://palak:Palak28@cluster0.sfyk0ek.mongodb.net/instaDB"
