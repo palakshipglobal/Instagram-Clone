@@ -1,23 +1,29 @@
-const express = require("express");
-const app = express();
-const PORT = 5001;
-const mongoose = require("mongoose");
+const express = require("express")
+const app = express()
+const PORT = 5001
+const mongoose = require("mongoose")
+const cors = require("cors")
 
-require("./models/model");
-app.use(express.json());
-app.use(require("./routes/auth")); //to run middleware function
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+)
+require("./models/model")
+app.use(express.json())
+app.use(require("./routes/auth")) //to run middleware function
 
 mongoose.connect(
   "mongodb+srv://palak:Palak28@cluster0.sfyk0ek.mongodb.net/instaDB"
-);
+)
 mongoose.connection.on("connected", () => {
-  console.log("succcess");
-});
+  console.log("succcess")
+})
 mongoose.connection.on("error", () => {
-  console.log("error");
-});
+  console.log("error")
+})
 
-app.listen(PORT, () => console.log("server running"));
+app.listen(PORT, () => console.log("server running"))
 
 // const http = require("http");
 
