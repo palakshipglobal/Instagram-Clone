@@ -1,17 +1,56 @@
-import { Instagram } from "lucide-react";
-import { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Instagram } from "lucide-react"
+import { useState } from "react"
+import { Link, useNavigate } from "react-router-dom"
+import { toast } from "react-toastify"
 
 function Signup() {
-  const fetchSignUpData = async () => {
-    const response = await fetch("http://localhost:5001/");
-    const data = await response.json();
-    console.log(data);
-  };
+  const navigate = useNavigate()
 
-  useEffect(() => {
-    fetchSignUpData();
-  }, []);
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [userName, setUserName] = useState("")
+  const [password, setPassword] = useState("")
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  const passwordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+
+  //Toast Fucntions
+  const errorToast = (message: React.ReactNode) => toast.error(message)
+  const successToast = (message: React.ReactNode) => toast.success(message)
+
+  const PostData = () => {
+    if (!emailRegex.test(email)) {
+      errorToast("Please enter a valid email address.")
+      return
+    } else if (!passwordRegex.test(password)) {
+      errorToast(
+        "Password must be 8+ characters with uppercase, lowercase, number, and symbol."
+      )
+      return
+    }
+    //sending data to server
+    fetch("http://localhost:5001/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        userName: userName,
+        password: password,
+      }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) errorToast(data.error)
+        else {
+          successToast(data.message)
+          navigate("/signin")
+        }
+      })
+  }
 
   return (
     <div className="flex flex-col items-center min-h-screen pt-24 bg-gradient-to-tr from-pink-100 via-white to-blue-100 gap-y-3">
@@ -26,10 +65,42 @@ function Signup() {
 
         {/* Input fields */}
         <div className="space-y-4">
-          <InputField type="email" name="email" placeholder="Email address" />
-          <InputField type="text" name="name" placeholder="Full Name" />
-          <InputField type="text" name="username" placeholder="Username" />
-          <InputField type="password" name="pw" placeholder="Password" />
+          <InputField
+            type="email"
+            name="email"
+            value={email}
+            placeholder="Email address"
+            onChange={(e) => {
+              setEmail(e.target.value)
+            }}
+          />
+          <InputField
+            type="text"
+            name="name"
+            value={name}
+            placeholder="Full Name"
+            onChange={(e) => {
+              setName(e.target.value)
+            }}
+          />
+          <InputField
+            type="text"
+            name="username"
+            value={userName}
+            placeholder="Username"
+            onChange={(e) => {
+              setUserName(e.target.value)
+            }}
+          />
+          <InputField
+            type="password"
+            name="password"
+            value={password}
+            placeholder="Password"
+            onChange={(e) => {
+              setPassword(e.target.value)
+            }}
+          />
         </div>
 
         {/* Terms */}
@@ -44,6 +115,7 @@ function Signup() {
         <input
           type="submit"
           value="Sign Up"
+          onClick={PostData}
           className="w-full py-2 font-semibold text-white transition duration-200 bg-pink-500 rounded-md cursor-pointer hover:bg-pink-600"
         />
       </div>
@@ -54,17 +126,17 @@ function Signup() {
         </Link>
       </p>
     </div>
-  );
+  )
 }
 
-export default Signup;
+export default Signup
 
 interface InputFieldProps {
-  type: string;
-  name: string;
-  placeholder?: string;
-  value?: string;
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  type: string
+  name: string
+  placeholder?: string
+  value?: string
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export const InputField: React.FC<InputFieldProps> = ({
@@ -83,5 +155,5 @@ export const InputField: React.FC<InputFieldProps> = ({
       onChange={onChange}
       className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-pink-400 focus:outline-none"
     />
-  );
-};
+  )
+}
