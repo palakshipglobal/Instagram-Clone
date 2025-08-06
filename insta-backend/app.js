@@ -10,7 +10,7 @@ app.use(
   })
 )
 require("./models/model")
-app.use(express.json())
+app.use(express.json()) // Middleware to parse JSON
 app.use(require("./routes/auth")) //to run middleware function
 
 mongoose.connect(

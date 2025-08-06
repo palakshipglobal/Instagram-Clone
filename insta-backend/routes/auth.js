@@ -3,9 +3,16 @@ const mongoose = require("mongoose")
 const router = express.Router()
 const USER = mongoose.model("USER")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const requireLogin = require("../middlewares/requireLogin")
+const jwt_secret = "keyforjwt" // This should ideally be in a separate config file or environment variable
 
 router.get("/", (req, res) => {
   res.send("Request sent successfully to the server")
+})
+
+router.get("/createPost", requireLogin, (req, res) => {
+  console.log("hello auth")
 })
 
 router.post("/signup", (req, res) => {
@@ -46,8 +53,12 @@ router.post("/signin", (req, res) => {
     bcrypt
       .compare(password, savedUser.password)
       .then((doMatch) => {
-        if (doMatch)
-          return res.status(200).json({ message: "Signed in successfully." })
+        if (doMatch) {
+          const token = jwt.sign({ _id: savedUser.id }, jwt_secret)
+          res.json(token)
+          console.log(token)
+        }
+        // return res.status(200).json({ message: "Signed in successfully." })
         else return res.status(422).json({ error: "Password do not match." })
       })
       .catch((error) => console.log(error))
