@@ -9,12 +9,16 @@ app.use(
     origin: "http://localhost:5173",
   })
 )
-require("./models/model")
 app.use(express.json()) // Middleware to parse JSON
+
+require("./models/model")
+require("./models/post")
 app.use(require("./routes/auth")) //to run middleware function
+app.use(require("./routes/createPost"))
 
 mongoose.connect(
-  "mongodb+srv://palak:Palak28@cluster0.sfyk0ek.mongodb.net/instaDB"
+  // "mongodb+srv://palak:Palak28@cluster0.sfyk0ek.mongodb.net/instaDB"
+  "mongodb+srv://palak:palak28@cluster0.lk5tshs.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
 )
 mongoose.connection.on("connected", () => {
   console.log("succcess")

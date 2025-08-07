@@ -56,10 +56,9 @@ router.post("/signin", (req, res) => {
         if (doMatch) {
           const token = jwt.sign({ _id: savedUser.id }, jwt_secret)
           res.json(token)
-          console.log(token)
-        }
-        // return res.status(200).json({ message: "Signed in successfully." })
-        else return res.status(422).json({ error: "Password do not match." })
+          // console.log(token)
+          return res.status(200).json({ message: "Signed in successfully." })
+        } else return res.status(422).json({ error: "Password do not match." })
       })
       .catch((error) => console.log(error))
   })

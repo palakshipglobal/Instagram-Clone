@@ -14,10 +14,10 @@ module.exports = (req, res, next) => {
     USER.findById(_id)
       .then((userData) => {
         req.user = userData // Attach user data to the request object
+        next() // Call next() to pass control to the next middleware or route handler
       })
       .catch((err) => {
         return res.status(401).json({ error: "User not found." })
       })
   })
-  next() // Call next() to pass control to the next middleware or route handler
 }
